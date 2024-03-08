@@ -12,4 +12,7 @@ int main() {
 	cout << "WELCOME To my Quiz Application." << "\t" << "Without any further ado, lets start!" << endl;
 	Main application = Main();
 	application.start();
+
+	//DatabaseConnection().getAllCategoriesWorking();
+	//QuizUserManager().getAllQuizes("C_1");
 }

@@ -45,6 +45,12 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DatabaseSingleton.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseConnection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">

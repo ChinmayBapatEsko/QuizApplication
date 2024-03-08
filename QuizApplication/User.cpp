@@ -1,7 +1,7 @@
 #include "User.h"
 
 User::User(string id, string username, string password, int quizAttempts, double accuracy) :
-	username(username), password(password), quizAttempts(quizAttempts), accuracy(accuracy){}
+	user_id(id), username(username), password(password), quizAttempts(quizAttempts), accuracy(accuracy) {}
 
 std::string User::getUsername() const {
     return username;

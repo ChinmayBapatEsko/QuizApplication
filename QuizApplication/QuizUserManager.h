@@ -7,10 +7,23 @@
 #include<string>
 #include<unordered_map>
 #include<vector>
+#include <stdlib.h>
+#include <iostream>
+#include <stdlib.h>
+#include <iostream>
+#include "mysql_connection.h"
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/prepared_statement.h>
+
+using namespace sql;
+
+static string attempt_id;
 
 class QuizUserManager
 {
 public:
+
 	QuizUserManager(const User u);
 	QuizUserManager() {};
 
@@ -20,7 +33,6 @@ public:
 	vector<pair<Question, vector<Option>>> QuestionList;//
 	vector<Category> currentCategories;//
 	vector<Quiz> quizzesInThisCategory;//
-	string attempt_id;//
 
 	void getAllCategories();//
 	void getAllQuizes(const string &category_id);//

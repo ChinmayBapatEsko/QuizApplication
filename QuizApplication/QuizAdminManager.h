@@ -6,7 +6,7 @@ class QuizAdminManager:public QuizUserManager
 {
 public:
 	Admin admin; //
-	QuizAdminManager(const Admin a) { admin = a; };
+	QuizAdminManager(const Admin a) { admin = a;};
 	QuizAdminManager() {};
 	//cant ids of any table.
 	void insertCategory(const string& category_name);//

@@ -1,11 +1,13 @@
 #include "QuizAdminManager.h"
 #include "Category.h"
 #include "DatabaseConnection.h"
+//#include "DatabaseSingleton.h"
 
 static Connection* conn = DatabaseConnection().getConnection();
 
 void QuizAdminManager::insertCategory(const string& category_name) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL InsertCategory(?)");
 		stmt->setString(1, category_name);
@@ -21,6 +23,7 @@ void QuizAdminManager::insertCategory(const string& category_name) {
 
 void QuizAdminManager::insertQuiz(const string& category_id, const string& quiz_title, const string& quiz_description) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL InsertQuiz(?, ?, ?)");
 		stmt->setString(1, category_id);
@@ -38,6 +41,7 @@ void QuizAdminManager::insertQuiz(const string& category_id, const string& quiz_
 
 void QuizAdminManager::insertQuestion(const string& quiz_id, const string& question_text, const string& question_type) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL InsertQuestion(?, ?, ?)");
 		stmt->setString(1, quiz_id);
@@ -55,6 +59,7 @@ void QuizAdminManager::insertQuestion(const string& quiz_id, const string& quest
 
 void QuizAdminManager::insertOption(const string& question_id, const string& option_text, const bool& isCorrect) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL InsertOption(?, ?, ?)");
 		stmt->setString(1, question_id);
@@ -72,6 +77,7 @@ void QuizAdminManager::insertOption(const string& question_id, const string& opt
 
 void QuizAdminManager::updateCategory(const string& category_id, const string& category_name) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL UpdateCategory(?, ?)");
 		stmt->setString(1, category_id);
@@ -88,6 +94,7 @@ void QuizAdminManager::updateCategory(const string& category_id, const string& c
 
 void QuizAdminManager::updateQuiz(const string& quiz_id, const string& category_id, const string& quiz_title, const string& quiz_description) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL UpdateQuiz(?, ?, ?, ?)");
 		stmt->setString(1, quiz_id);
@@ -106,6 +113,7 @@ void QuizAdminManager::updateQuiz(const string& quiz_id, const string& category_
 
 void QuizAdminManager::updateQuestion(const string& question_id, const string& quiz_id, const string& question_text, const string& question_type) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL UpdateQuestion(?, ?, ?, ?)");
 		stmt->setString(1, question_id);
@@ -124,6 +132,7 @@ void QuizAdminManager::updateQuestion(const string& question_id, const string& q
 
 void QuizAdminManager::updateOption(const string& option_id, const string& question_id, const string& option_text, const bool& isCorrect) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL UpdateOption(?, ?, ?, ?)");
 		stmt->setString(1, option_id);
@@ -142,6 +151,7 @@ void QuizAdminManager::updateOption(const string& option_id, const string& quest
 
 void QuizAdminManager::deleteCategory(const string& category_id) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL DeleteCategory(?)");
 		stmt->setString(1, category_id);
@@ -157,6 +167,7 @@ void QuizAdminManager::deleteCategory(const string& category_id) {
 
 void QuizAdminManager::deleteQuiz(const string& quiz_id) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL DeleteQuiz(?)");
 		stmt->setString(1, quiz_id);
@@ -172,6 +183,7 @@ void QuizAdminManager::deleteQuiz(const string& quiz_id) {
 
 void QuizAdminManager::deleteQuestion(const string& question_id) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL DeleteQuestion(?)");
 		stmt->setString(1, question_id);
@@ -187,6 +199,7 @@ void QuizAdminManager::deleteQuestion(const string& question_id) {
 
 void QuizAdminManager::deleteOption(const string& option_id) {
 	try {
+		//Connection* conn = DatabaseSingleton::getConnection();
 		conn->setSchema("quizapplication");
 		PreparedStatement* stmt = conn->prepareStatement("CALL DeleteOption(?)");
 		stmt->setString(1, option_id);

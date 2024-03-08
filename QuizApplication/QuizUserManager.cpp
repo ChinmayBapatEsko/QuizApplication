@@ -3,8 +3,6 @@
 #include "vector"
 #include <utility>
 
-static Connection* conn = DatabaseConnection().getConnection();
-
 QuizUserManager::QuizUserManager(const User u){
 	user = u;
 };
@@ -14,55 +12,12 @@ void QuizUserManager::changeUser(const User u) {
 }
 
 void QuizUserManager::getAllCategories() {
-	vector<Category> ans;
-	try {
-		conn->setSchema("quizapplication");
-		Statement* stmt = conn->createStatement();
-		ResultSet* res = stmt->executeQuery("CALL GetAllCategories()");
 
-		while (res->next()) {
-			string id = res->getString("category_id");
-			string name = res->getString("category_name");
-			Category category(id, name);
-			ans.push_back(category);
-		}
-		delete res;
-		delete stmt;
-
-	}
-	catch(SQLException& e){
-		cout << "MySQL Error: " << e.what() << endl;
-	}
-
-	currentCategories = ans;
+	currentCategories = DatabaseConnection().callGetAllCategories();
 }
 
-
 void QuizUserManager::getAllQuizes(const string& category_id) {
-	vector<Quiz> ans;
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL GetQuizzesByCategory(?)");
-		stmt->setString(1, category_id);
-		ResultSet* res = stmt->executeQuery();
-
-		while (res->next()) {
-			string quiz_id = res->getString("quiz_id");
-			string category_id = res->getString("category_id");
-			string quiz_title = res->getString("quiz_title");
-			string quiz_description = res->getString("quiz_description");
-			Quiz quiz(quiz_id, category_id, quiz_title, quiz_description);
-			ans.push_back(quiz);
-		}
-		delete res;
-		delete stmt;
-
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
-
-	quizzesInThisCategory = ans;
+	quizzesInThisCategory = DatabaseConnection().callgetAllQuizzes(category_id);
 }
 
 void QuizUserManager::setCategory(const Category& c) {
@@ -74,176 +29,31 @@ void QuizUserManager::setQuiz(const Quiz& q) {
 }
 
 vector<Option> QuizUserManager::getOptionByQuestion(const string& question_id) {
-	vector<Option> ans;
-
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL GetOptionsByQuestion(?)");
-		stmt->setString(1, question_id);
-		ResultSet* res = stmt->executeQuery();
-
-		while (res->next()) {
-			string option_id = res->getString("option_id");
-			string question_id = res->getString("question_id");
-			string option_text = res->getString("option_text");
-			bool isCorrect = res->getBoolean("is_correct");
-			Option option(option_id, question_id, option_text, isCorrect);
-			ans.push_back(option);
-		}
-		delete res;
-		delete stmt;
-
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
-
-	return ans;
+	return DatabaseConnection().callGetOptionByQuestion(question_id);
 }
 
 void QuizUserManager::setMap(const string& quiz_id) {
-	vector<Question> qList;
-
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL GetQuestionsByQuiz(?)");
-		stmt->setString(1, quiz_id);
-		ResultSet* res = stmt->executeQuery();
-
-		while (res->next()) {
-			string question_id = res->getString("question_id");
-			string quiz_id = res->getString("quiz_id");
-			string question_text = res->getString("question_text");
-			string question_type = res->getString("question_type");
-			Question question(question_id, quiz_id, question_text, question_type);
-			qList.push_back(question);
-		}
-		delete res;
-		delete stmt;
-
-		try {
-			for (auto& q : qList) {
-				vector<Option> opts = getOptionByQuestion(q.question_id);
-				QuestionList.push_back({ q , opts });
-			}
-		}
-		catch (SQLException& e) {
-			cout << "MySQL Error: " << e.what() << endl;
-		}
-
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
+	QuestionList = DatabaseConnection().callSetMap(quiz_id);
 }
 
 double QuizUserManager::getLatestQuizScore(const string& quiz_id, const string& user_id) {
-	
-	double score;
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL getLatestQuizScore(?, ?)");
-		stmt->setString(1, quiz_id);
-		stmt->setString(2, user_id);
-		ResultSet* res = stmt->executeQuery();
-
-		while (res->next()) {
-			score = res->getDouble("score");
-		}
-
-		delete res;
-		delete stmt;
-	}
-	catch(SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
-
-	return score;
+	return DatabaseConnection().callGetLatestQuizScore(quiz_id, user_id);
 }
 
 void QuizUserManager::getLatestAttemptDetails(const string& user_id) {
-	//vector<string, pair<string, string>> ans;
-
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL GetLatestAttemptDetails(?)");
-		stmt->setString(1, user_id);
-		ResultSet* res = stmt->executeQuery();
-
-		while (res->next()) {
-			string questionText = res->getString("question_text");
-			string user_answer_text = res->getString("user_answer_text");
-			string correct_answer_text = res->getString("correct_answer_text");
-			//ans[questionText] = make_pair(user_answer_text, correct_answer_text);
-
-			cout << "Question: " << questionText << endl;
-			cout << "User answered this: " << user_answer_text << endl;
-			cout << "Actual answer is: " << correct_answer_text << endl;
-		}
-		delete res;
-		delete stmt;
-
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
-
+	DatabaseConnection().callGetLatestAttemptDetails(user_id);
 }
 
 void QuizUserManager::insertUserAttempt(const string& user_id, const string& quiz_id) {
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL InsertUserAttempt(?, ?)");
-		stmt->setString(1, user_id);
-		stmt->setString(2, quiz_id);
-		stmt->executeUpdate();
-
-		delete stmt;
-
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
+	DatabaseConnection().callInsertUserAttempt(user_id, quiz_id);
 }
 
 string QuizUserManager::getLatestAttemptId(const string& user_id) {
-	string ans;
-
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL getLatestAttemptId(?)");
-		stmt->setString(1, user_id);
-		ResultSet* res = stmt->executeQuery();
-
-		while (res->next()) {
-			ans = res->getString("latestAttemptID");
-		}
-
-		delete res;
-		delete stmt;
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
-
-	return ans;
+	return DatabaseConnection().callGetLatestAttemptId(user_id);
 }
 
 void QuizUserManager::insertUserAnswer(const string& attempt_id, const string& question_id, const string& option_id) {
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL InsertUserAttempt(?, ?)");
-		stmt->setString(1, attempt_id);
-		stmt->setString(2, question_id);
-		stmt->setString(3, option_id);
-		stmt->executeUpdate();
-
-		delete stmt;
-
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
+	DatabaseConnection().callInsertUserAnswer(attempt_id, question_id, option_id);
 }
 
 void QuizUserManager::takeAnotherQuiz() {
@@ -293,65 +103,15 @@ void QuizUserManager::takeAnotherQuiz() {
 }
 
 double QuizUserManager::viewUserAccuracy(const string& user_id) {
-	double accuracy;
-
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("select Accuracy from User u where u.user_id = (?)");
-		stmt->setString(1, user_id);
-		ResultSet* res = stmt->executeQuery();
-
-		while (res->next()) {
-			accuracy = res->getDouble("Accuracy");
-		}
-
-		delete res;
-		delete stmt;
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
-
-	return accuracy;
+	return DatabaseConnection().callViewUserAccuracy(user_id);
 }
 
 void QuizUserManager::viewPreviousScores(const string& user_id) {
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL GetAllUserAttemptsWScores(?)");
-		stmt->setString(1, user_id);
-		ResultSet* res = stmt->executeQuery();
-
-		cout << "Printing the history of the User with Quiz and its Scores: " << endl;
-
-		while (res->next()) {
-			string Score = res->getString("Score");
-			string quiz_title = res->getString("quiz_title");
-
-			cout << "Quiz Title: " << quiz_title << "and Score is: " << Score << endl;
-		}
-		delete res;
-		delete stmt;
-
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
+	DatabaseConnection().callViewPreviousScores(user_id);
 }
 
 void QuizUserManager::increaseUserAttempts(const string& user_id) {
-	try {
-		conn->setSchema("quizapplication");
-		PreparedStatement* stmt = conn->prepareStatement("CALL IncrementQuizAttempts(?)");
-		stmt->setString(1, user_id);
-		stmt->executeUpdate();
-
-		delete stmt;
-
-	}
-	catch (SQLException& e) {
-		cout << "MySQL Error: " << e.what() << endl;
-	}
+	DatabaseConnection().callIncreaseUserAttempts(user_id);
 }
 
 void QuizUserManager::startUserOperation() {
@@ -407,7 +167,7 @@ void QuizUserManager::decideQuiz() {
 vector<pair<Question, Option>> QuizUserManager::startQuiz(const string& user_id) {
 	insertUserAttempt(user_id, quiz.quiz_id); //create user attempt
 	increaseUserAttempts(user_id); // increase number of attempts in User Table
-	attempt_id = getLatestAttemptId(user_id);
+	attempt_id = getLatestAttemptId(user.user_id);
 
 	cout << "Great! Now that you have selected the quiz you want to attempt, LETS START!" << endl;
 	cout << "Loading questions and options for you!" << endl;

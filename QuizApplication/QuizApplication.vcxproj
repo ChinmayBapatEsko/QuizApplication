@@ -134,6 +134,8 @@
   <ItemGroup>
     <ClCompile Include="AuthenticationManager.cpp" />
     <ClCompile Include="Category.cpp" />
+    <ClCompile Include="DatabaseConnection.cpp" />
+    <ClCompile Include="DatabaseSingleton.h" />
     <ClCompile Include="InstanceManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Option.cpp" />
