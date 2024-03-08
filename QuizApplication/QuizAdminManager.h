@@ -24,6 +24,6 @@ public:
 	void deleteQuestion(const string& question_id);//
 	void deleteOption(const string& option_id);//
 
-	static void startAdminOperation();//
+	void startAdminOperation();//
 };
 

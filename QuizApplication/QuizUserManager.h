@@ -48,14 +48,14 @@ public:
 
 	void insertUserAttempt(const string& user_id, const string& quiz_id);//
 	string getLatestAttemptId(const string& user_id);//
-	void insertUserAnswer(const string& attempt_id, const string& question_id, const string& option_id);//
+	void insertUserAnswer(const string& attempt_id, vector<pair<Question, Option>> userAnswered);//
 	
+	void startUserOperation();//
 	void takeAnotherQuiz();//
 	double viewUserAccuracy(const string& user_id);//
 	void viewPreviousScores(const string& user_id);//
 	void increaseUserAttempts(const string& user_id);//
 
-	void startUserOperation();//
 	void decideCategory();//
 	void decideQuiz();//
 	vector<pair<Question, Option>> startQuiz(const string& user_id);//

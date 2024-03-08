@@ -21,7 +21,10 @@ pair<bool, string> AuthenticationManager::init() {
 
 pair<bool, string> AuthenticationManager::Login() {
 	cout << "Please enter Username and Password: " << endl;
-	cin >> username >> password;
+	cout << "Username: ";
+	cin >> username;
+	cout << "Password: ";
+	cin >> password;
 	
 	return DatabaseConnection().callLoginFunction(username, password);
 }
@@ -32,7 +35,10 @@ void AuthenticationManager::Register() {
 	bool tempFlag;
 	int choice;
 	cout << "Please enter Username and Password: " << endl;
-	cin >> tempUsername >> tempPass;
+	cout << "Username: ";
+	cin >> tempUsername;
+	cout << "Password: ";
+	cin >>  tempPass;
 	cout << "Are you an admin? Type 0 for No and 1 for Yes: " << endl;
 	cin >> choice;
 	if (choice == 1) {
@@ -43,5 +49,8 @@ void AuthenticationManager::Register() {
 	}
 
 	DatabaseConnection().callRegisterFunction(tempUsername, tempPass, tempFlag);
+
+	cout << "Lets Retry logging in now: " << endl;
+	cout << "-------------------------------------------------------------" << endl;
 
 }

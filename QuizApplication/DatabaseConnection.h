@@ -43,6 +43,7 @@ public:
         return conn;
     }
 
+    /////////////////////////////////////////////////USER////////////////////////////////////////////
 
     vector<Category> callGetAllCategories() {
         vector<Category> ans;
@@ -125,7 +126,7 @@ public:
         return ans;
     }
 
-    vector<pair<Question, vector<Option>>> callSetMap(const string& quiz_id) {
+    vector<Question> callSetMap(const string& quiz_id) {
         vector<Question> qList;
         vector<pair<Question, vector<Option>>> QuestionList;
         try {
@@ -144,16 +145,21 @@ public:
             }
             delete res;
             delete stmt;
-            try {
-                for (auto& q : qList) {
-                    vector<Option> opts = callGetOptionByQuestion(q.question_id);
-                    QuestionList.push_back({ q , opts });
-                }
-            }
-            catch (SQLException& e) {
-                cout << "MySQL Error: " << e.what() << endl;
-            }
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
 
+        return qList;
+    }
+
+    vector<pair<Question, vector<Option>>> callSetOptionsInMap(vector<Question> qList) {
+        vector<pair<Question, vector<Option>>> QuestionList;
+        try {
+            for (auto& q : qList) {
+                vector<Option> opts = callGetOptionByQuestion(q.question_id);
+                QuestionList.push_back({ q , opts });
+            }
         }
         catch (SQLException& e) {
             cout << "MySQL Error: " << e.what() << endl;
@@ -200,7 +206,7 @@ public:
 
                 cout << "Question: " << questionText << endl;
                 cout << "User answered this: " << user_answer_text << endl;
-                cout << "Actual answer is: " << correct_answer_text << endl;
+                cout << "Actual answer is: " << correct_answer_text << endl << endl;
             }
             delete res;
             delete stmt;
@@ -252,8 +258,9 @@ public:
 
     void callInsertUserAnswer(const string& attempt_id, const string& question_id, const string& option_id) {
         try {
+            //cout << "AttemptID" << attempt_id << endl;
             conn->setSchema("quizapplication");
-            PreparedStatement* stmt = conn->prepareStatement("CALL InsertUserAttempt(?, ?)");
+            PreparedStatement* stmt = conn->prepareStatement("CALL InsertUserAnswer(?, ?, ?)");
             stmt->setString(1, attempt_id);
             stmt->setString(2, question_id);
             stmt->setString(3, option_id);
@@ -391,6 +398,204 @@ public:
             stmt->setString(1, tempUsername);
             stmt->setString(2, tempPass);
             stmt->setBoolean(3, tempFlag);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    //////////////////////////////////////////ADMIN///////////////////////////////////////////////////////
+
+    void callInsertCategory(const string& category_name) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL InsertCategory(?)");
+            stmt->setString(1, category_name);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callInsertQuiz(const string& category_id, const string& quiz_title, const string& quiz_description) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL InsertQuiz(?, ?, ?)");
+            stmt->setString(1, category_id);
+            stmt->setString(2, quiz_title);
+            stmt->setString(3, quiz_description);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callInsertQuestion(const string& quiz_id, const string& question_text, const string& question_type) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL InsertQuestion(?, ?, ?)");
+            stmt->setString(1, quiz_id);
+            stmt->setString(2, question_text);
+            stmt->setString(3, question_type);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callInsertOption(const string& question_id, const string& option_text, const bool& isCorrect) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL InsertOption(?, ?, ?)");
+            stmt->setString(1, question_id);
+            stmt->setString(2, option_text);
+            stmt->setBoolean(3, isCorrect);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callUpdateCategory(const string& category_id, const string& category_name) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL UpdateCategory(?, ?)");
+            stmt->setString(1, category_id);
+            stmt->setString(2, category_name);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callUpdateQuiz(const string& quiz_id, const string& category_id, const string& quiz_title, const string& quiz_description) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL UpdateQuiz(?, ?, ?, ?)");
+            stmt->setString(1, quiz_id);
+            stmt->setString(2, category_id);
+            stmt->setString(3, quiz_title);
+            stmt->setString(4, quiz_description);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callUpdateQuestion(const string& question_id, const string& quiz_id, const string& question_text, const string& question_type) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL UpdateQuestion(?, ?, ?, ?)");
+            stmt->setString(1, question_id);
+            stmt->setString(2, quiz_id);
+            stmt->setString(3, question_text);
+            stmt->setString(4, question_type);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callUpdateOption(const string& option_id, const string& question_id, const string& option_text, const bool& isCorrect) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL UpdateOption(?, ?, ?, ?)");
+            stmt->setString(1, option_id);
+            stmt->setString(2, question_id);
+            stmt->setString(3, option_text);
+            stmt->setBoolean(4, isCorrect);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callDeleteCategory(const string& category_id) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL DeleteCategory(?)");
+            stmt->setString(1, category_id);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callDeleteQuiz(const string& quiz_id) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL DeleteQuiz(?)");
+            stmt->setString(1, quiz_id);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callDeleteQuestion(const string& question_id) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL DeleteQuestion(?)");
+            stmt->setString(1, question_id);
+            stmt->executeUpdate();
+
+            delete stmt;
+
+        }
+        catch (SQLException& e) {
+            cout << "MySQL Error: " << e.what() << endl;
+        }
+    }
+
+    void callDeleteOption(const string& option_id) {
+        try {
+            conn->setSchema("quizapplication");
+            PreparedStatement* stmt = conn->prepareStatement("CALL DeleteOption(?)");
+            stmt->setString(1, option_id);
             stmt->executeUpdate();
 
             delete stmt;

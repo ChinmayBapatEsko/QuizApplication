@@ -9,7 +9,8 @@ void Main::start() {
 }
 
 int main() {
-	cout << "WELCOME To my Quiz Application." << "\t" << "Without any further ado, lets start!" << endl;
+	cout << "WELCOME To my Quiz Application." << "\t" << "Without any further ado, lets start!" << endl << endl;
+	cout << "------------------------------------------------------------------------------" << endl;
 	Main application = Main();
 	application.start();
 

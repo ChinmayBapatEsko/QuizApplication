@@ -5,6 +5,7 @@ InstanceManager::InstanceManager(pair<bool, string> creds) {
 	string user_id = creds.second;
 	bool isAdmin = creds.first;
 
+	cout << "-----------------------------------------------------------------------" << endl;
 	cout << "Setting up User Profile, please hold on.." << endl;
 
 	User temp = DatabaseConnection().callInstanceManagerUtility(user_id);

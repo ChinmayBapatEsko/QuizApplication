@@ -12,11 +12,12 @@ void QuizUserManager::changeUser(const User u) {
 }
 
 void QuizUserManager::getAllCategories() {
-
+	currentCategories.clear();
 	currentCategories = DatabaseConnection().callGetAllCategories();
 }
 
 void QuizUserManager::getAllQuizes(const string& category_id) {
+	quizzesInThisCategory.clear();
 	quizzesInThisCategory = DatabaseConnection().callgetAllQuizzes(category_id);
 }
 
@@ -33,7 +34,12 @@ vector<Option> QuizUserManager::getOptionByQuestion(const string& question_id) {
 }
 
 void QuizUserManager::setMap(const string& quiz_id) {
-	QuestionList = DatabaseConnection().callSetMap(quiz_id);
+	vector<Question> temp;
+	 temp = DatabaseConnection().callSetMap(quiz_id);
+	 //QuestionList = DatabaseConnection().callSetOptionsInMap(temp);
+	 for (auto& q : temp) {
+		 QuestionList.push_back({q , DatabaseConnection().callGetOptionByQuestion(q.question_id) });
+	 }
 }
 
 double QuizUserManager::getLatestQuizScore(const string& quiz_id, const string& user_id) {
@@ -52,8 +58,10 @@ string QuizUserManager::getLatestAttemptId(const string& user_id) {
 	return DatabaseConnection().callGetLatestAttemptId(user_id);
 }
 
-void QuizUserManager::insertUserAnswer(const string& attempt_id, const string& question_id, const string& option_id) {
-	DatabaseConnection().callInsertUserAnswer(attempt_id, question_id, option_id);
+void QuizUserManager::insertUserAnswer(const string& attempt_id, vector<pair<Question, Option>> userAnswered) {
+	for (auto& qa : userAnswered) {
+		DatabaseConnection().callInsertUserAnswer(attempt_id, qa.first.question_id, qa.second.option_id);
+	}
 }
 
 void QuizUserManager::takeAnotherQuiz() {
@@ -62,13 +70,14 @@ void QuizUserManager::takeAnotherQuiz() {
 		cout << "Do you want to play another quiz?" << endl;
 		cin >> choice1;
 		if (choice1 == 0) {
+			cout << "THANKYOU!!!" << endl;
 			exit(0);
 		}
 		else {
-			cout << "Do you want to take quiz of the same category?" << endl << "Press 1 for Yes and 0 for No" << endl;
+			cout << "Do you want to take quiz of the same category?" << endl << "Press 1 for Yes and 0 for No: " << endl;
 			cin >> choice1;
 			if (choice1 == 1) {
-				cout << "Do you want to retake the same quiz?" << endl << "Press 1 for Yes and 0 for No" << endl;
+				cout << "Do you want to retake the same quiz?" << endl << "Press 1 for Yes and 0 for No: " << endl;
 				cin >> choice2;
 				if (choice2 == 1) {
 					//start quiz
@@ -138,30 +147,40 @@ void QuizUserManager::startUserOperation() {
 void QuizUserManager::decideCategory() {
 	int choice;
 	getAllCategories();
-	cout << "Lets hop onto the the game, User!" << "\t" << "Choose wisely, we are keeping your track record!!" << endl;
+	cout << "---------------------------------------------------------------------------------------------" << endl;
+	cout << "Lets hop onto the the game, User!" << "  " << "Choose wisely, we are keeping your track record!!" << endl;
 	cout << "NOTE: While Choosing anything including options, quizzes, categories, input of the integer n is expected where your choice is the nth value in the shown list" << endl;
-	cout << "These are the quiz categories that we currently have." << endl;
-
+	cout << "---------------------------------------------------------------------------------------------" << endl << endl;
+	cout << "These are the quiz categories that we currently have." << endl << endl;
+	int count = 0;
 	for (auto& category : currentCategories) {
-		cout << category << endl;
+		count++;
+		cout << count << ") " << category << endl;
 	}
+	cout << endl;
+	cout << "----------------------------------------------------------------------------------------------" << endl;
 	cout << "Make a choice!" << endl;
 	cin >> choice;
-	cout << "Ok, choosing category: " << currentCategories[choice - 1] << endl;
+	cout << "Ok, choosing category "<< count << ") " << currentCategories[choice - 1] << endl << endl;
 	cat = currentCategories[choice - 1];
+	cout << "----------------------------------------------------------------------------------------------" << endl;
 }
 
 void QuizUserManager::decideQuiz() {
 	int choice;
-	cout << "Showing all the quizzes in the chosen category. Choose which quiz you want to attempt:  " << endl;
+	cout << "Showing all the quizzes in the chosen category. Choose which quiz you want to attempt:  " << endl << endl;
 	getAllQuizes(cat.category_id);
+	int count = 0;
 	for (auto& quiz : quizzesInThisCategory) {
-		cout << quiz << endl;
+		count++;
+		cout << count << ") " << quiz << endl;
 	}
+	cout << "-----------------------------------------------------------------------------------------------" << endl;
 	cout << "Make a choice!" << endl;
 	cin >> choice;
-	cout << "Ok, choosing quiz with title: " << quizzesInThisCategory[choice - 1].quiz_title << endl;
+	cout << "Ok, choosing quiz with title: "<< count << ") " << quizzesInThisCategory[choice - 1].quiz_title << endl << endl;
 	quiz = quizzesInThisCategory[choice - 1];
+	cout << "------------------------------------------------------------------------------------------------" << endl;
 }
 
 vector<pair<Question, Option>> QuizUserManager::startQuiz(const string& user_id) {
@@ -170,39 +189,45 @@ vector<pair<Question, Option>> QuizUserManager::startQuiz(const string& user_id)
 	attempt_id = getLatestAttemptId(user.user_id);
 
 	cout << "Great! Now that you have selected the quiz you want to attempt, LETS START!" << endl;
-	cout << "Loading questions and options for you!" << endl;
-
+	cout << "Loading questions and options for you!" << endl << endl;
+	
+	cout << "------------------------------------------------------------------------------------------------" << endl;
 	setMap(quiz.quiz_id);
 
-	cout << "STARTING THE QUIZ! ANSWER WISELY..." << endl;
+	cout << "STARTING THE QUIZ! ANSWER WISELY..." << endl << endl;
 	vector<pair<Question, Option>> userAnswered;
 
+	int qCount = 0;
 	for (auto& question : QuestionList) {
 		int optionChoice;
-		cout << question.first << endl;
+		qCount++;
+		cout << "Q" << qCount << ") " << question.first << endl;
 		cout << "OPTIONS ARE: " << endl;
+		int oCount = 0;
 		for (auto& option : question.second) {
-			cout << option << endl;
+			oCount++;
+			cout << oCount << ") " << option << endl;
 		}
+		cout << endl;
 		cout << "Your answer will be: " << endl;
 		cin >> optionChoice;
 		Option userChoiceOption = question.second[optionChoice - 1];
 		//append in the user answered.
 		userAnswered.push_back({ question.first, question.second[optionChoice - 1] });
 	}
+	cout << "---------------------------------------------------------------------------------" << endl;
 	return userAnswered;
 }
 
 void QuizUserManager::postQuizShow(const string& user_id, const string & attempt_id, vector<pair<Question, Option>> userAnswered) {
 	cout << "Congratulations!! You have completed you attempt!" << endl;
 	cout << "Hold on, let me sync your attempt with the DB..." << endl;
-
-	for (auto& qa : userAnswered) {
-		insertUserAnswer(attempt_id, qa.first.question_id, qa.second.option_id);
-	}
+	
+	insertUserAnswer(attempt_id,userAnswered);
 
 	cout << "Done! Now lets get your quiz score.." << endl;
-	cout << "Following are the details of your Quiz Attempt." << endl;
+	cout << "Following are the details of your Quiz Attempt." << endl << endl;
 	getLatestAttemptDetails(user_id);
-	cout << "Your score (%) is: " << getLatestQuizScore(quiz.quiz_id, user_id);
+	cout << "Your score (%) is: " << getLatestQuizScore(quiz.quiz_id, user_id) << endl;
+	cout << "---------------------------------------------------------------------------------" << endl;
 }
