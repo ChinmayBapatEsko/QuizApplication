@@ -161,6 +161,7 @@ void QuizUserManager::decideCategory() {
 	cout << "----------------------------------------------------------------------------------------------" << endl;
 	cout << "Make a choice!" << endl;
 	cin >> choice;
+	if (choice > currentCategories.size()) { cout << "CATEGORY YOU WANT, IS NOT SERVED HERE, PLS INPUT PROPERLY!" << endl; exit(0); }
 	cout << "Ok, choosing category "<< count << ") " << currentCategories[choice - 1] << endl << endl;
 	cat = currentCategories[choice - 1];
 	cout << "----------------------------------------------------------------------------------------------" << endl;
