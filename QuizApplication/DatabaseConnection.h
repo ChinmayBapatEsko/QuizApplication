@@ -252,7 +252,6 @@ public:
         catch (SQLException& e) {
             cout << "MySQL Error: " << e.what() << endl;
         }
-        cout << ans;
         return ans;
     }
 

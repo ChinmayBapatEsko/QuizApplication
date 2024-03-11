@@ -2,6 +2,8 @@
 #include "DatabaseConnection.h"
 #include "vector"
 #include <utility>
+#include <chrono>
+#include <thread>
 
 QuizUserManager::QuizUserManager(const User u){
 	user = u;
@@ -151,6 +153,7 @@ void QuizUserManager::decideCategory() {
 	cout << "Lets hop onto the the game, User!" << "  " << "Choose wisely, we are keeping your track record!!" << endl;
 	cout << "NOTE: While Choosing anything including options, quizzes, categories, input of the integer n is expected where your choice is the nth value in the shown list" << endl;
 	cout << "---------------------------------------------------------------------------------------------" << endl << endl;
+	std::this_thread::sleep_for(std::chrono::seconds(2));
 	cout << "These are the quiz categories that we currently have." << endl << endl;
 	int count = 0;
 	for (auto& category : currentCategories) {
@@ -169,6 +172,7 @@ void QuizUserManager::decideCategory() {
 
 void QuizUserManager::decideQuiz() {
 	int choice;
+	std::this_thread::sleep_for(std::chrono::seconds(2));
 	cout << "Showing all the quizzes in the chosen category. Choose which quiz you want to attempt:  " << endl << endl;
 	getAllQuizes(cat.category_id);
 	int count = 0;
@@ -191,11 +195,16 @@ vector<pair<Question, Option>> QuizUserManager::startQuiz(const string& user_id)
 
 	cout << "Great! Now that you have selected the quiz you want to attempt, LETS START!" << endl;
 	cout << "Loading questions and options for you!" << endl << endl;
-	
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 	cout << "------------------------------------------------------------------------------------------------" << endl;
 	setMap(quiz.quiz_id);
 
 	cout << "STARTING THE QUIZ! ANSWER WISELY..." << endl << endl;
+
+	for (int i = 5; i >= 1; i--) {
+		cout << i << endl;
+		this_thread::sleep_for(chrono::seconds(1));
+	}
 	vector<pair<Question, Option>> userAnswered;
 
 	int qCount = 0;

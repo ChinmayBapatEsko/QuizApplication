@@ -8,7 +8,6 @@ using namespace std;
 static QuizUserManager userManager; //
 static QuizAdminManager adminManager; //
 
-//static pair<bool, string> response;
 class InstanceManager
 {
 public:
