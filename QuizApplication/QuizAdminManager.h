@@ -5,6 +5,8 @@ The class takes care of handling all the functions of the Admin.
 The AdminManager can let the Admin inside it CREATE, UPDATE or DELETE the Categories, Quizzes, Questions in the Quizzes and also the Options of a particular Question.
 The manager can also divert the Admin to play the quiz if he wishes for.
 
+No client for the class. Server for the class is the InstanceManager class
+
 */
 
 #pragma once

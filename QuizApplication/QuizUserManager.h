@@ -6,7 +6,9 @@ the quiz itself and the list of questions with their options inside the quiz. Th
 
 The class can also show the user's accuracy. Can also show the scores that the user scored in his various attempts.
 
-The class also handles the option if user wants to take another quiz (of different / same category, retake same quiz / different quiz)
+The class also handles the option if user wants to take another quiz (of different / same category, retake same quiz / different quiz).
+
+No client for the class. Server for the class is the InstanceManager class
 
 */
 
