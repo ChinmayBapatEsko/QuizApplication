@@ -51,6 +51,9 @@
     <ClCompile Include="DatabaseConnection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MySqlChecker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">
@@ -89,5 +92,14 @@
     <ClInclude Include="Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MySqlChecker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

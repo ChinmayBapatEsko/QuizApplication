@@ -1,3 +1,16 @@
+
+/*
+
+QuizUserManager class is responsible to create and maintain the state of the entire game for a User. The state of game includes the Category of quiz that is being played, 
+the quiz itself and the list of questions with their options inside the quiz. The manager will also keep track of the options that the user has answered
+
+The class can also show the user's accuracy. Can also show the scores that the user scored in his various attempts.
+
+The class also handles the option if user wants to take another quiz (of different / same category, retake same quiz / different quiz)
+
+*/
+
+
 #pragma once
 #include "User.h"
 #include "Category.h"

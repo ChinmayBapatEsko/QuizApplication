@@ -138,6 +138,7 @@
     <ClCompile Include="DatabaseSingleton.h" />
     <ClCompile Include="InstanceManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MySqlChecker.cpp" />
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="Quiz.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="DatabaseConnection.h" />
     <ClInclude Include="InstanceManager.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="MySqlChecker.h" />
     <ClInclude Include="Option.h" />
     <ClInclude Include="Question.h" />
     <ClInclude Include="Quiz.h" />
@@ -159,7 +161,18 @@
     <ClInclude Include="QuizUserManager.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\rapidjson.1.0.2\build\native\rapidjson.targets" Condition="Exists('..\packages\rapidjson.1.0.2\build\native\rapidjson.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\rapidjson.1.0.2\build\native\rapidjson.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\rapidjson.1.0.2\build\native\rapidjson.targets'))" />
+  </Target>
 </Project>

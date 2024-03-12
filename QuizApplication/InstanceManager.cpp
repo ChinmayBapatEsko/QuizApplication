@@ -2,6 +2,10 @@
 #include "DatabaseConnection.h"
 
 InstanceManager::InstanceManager(pair<bool, string> creds) {
+	/*cout << "InstanceConstructor" << endl;
+	cout << creds.first;
+	cout << creds.second;*/
+
 	string user_id = creds.second;
 	bool isAdmin = creds.first;
 

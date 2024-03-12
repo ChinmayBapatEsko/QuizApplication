@@ -7,6 +7,9 @@ using namespace std;
 pair<bool, string> AuthenticationManager::init() {
 	//pair<bool, string> response;
 	response = Login();
+	/*cout << "InitMethod" << endl;
+	cout << response.first;
+	cout << response.second;*/
 	if (response.second == "") {
 		//no user found
 		Register();
