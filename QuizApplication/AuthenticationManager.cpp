@@ -13,7 +13,7 @@ pair<bool, string> AuthenticationManager::init() {
 	if (response.second == "") {
 		//no user found
 		Register();
-		init();
+		return Login();
 	}
 	else {
 		//user found
