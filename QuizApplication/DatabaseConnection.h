@@ -21,21 +21,33 @@ Clients to this class: QuizUserManager and QuizAdminManager.
 #include "vector"
 #include <utility>
 #include "User.h"
+#include <fstream>
+#include <sstream>
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/stringbuffer.h"
 
 using namespace std;
 using namespace sql;
+using namespace rapidjson;
 
 class DatabaseConnection {
 private:
-    const string server = "tcp://127.0.0.1:3306";
-    const string username = "root";
-    const string password = "Chinpat@2002";
+    string server = "tcp://127.0.0.1:3306";
+    string username = "root";
+    string password = "Chinpat@2002";
 
 public:
     Connection* conn;
     Driver* driver;
     DatabaseConnection() {
+        if (server.empty() && username.empty() && password.empty()) {
+            cout << server << username << password;
+            updateCredentials();
+        }
         try {
+            cout << server << username << password;
             driver = get_driver_instance();
             conn = driver->connect(server, username, password);
         }
@@ -51,6 +63,27 @@ public:
 
     Connection* getConnection() {
         return conn;
+    }
+
+    void updateCredentials() {
+        ifstream configFile("config.json");
+        if (!configFile.is_open()) {
+            cerr << "Failed to open config.json" << endl;
+            exit(1);
+        }
+
+        stringstream buffer;
+        buffer << configFile.rdbuf();
+        string jsonText = buffer.str();
+        configFile.close();
+
+        Document doc;
+        doc.Parse(jsonText.c_str());
+
+        // Set server, username, and password from JSON
+        server = doc["server"].GetString();
+        username = doc["username"].GetString();
+        password = doc["password"].GetString();
     }
 
     /////////////////////////////////////////////////USER////////////////////////////////////////////

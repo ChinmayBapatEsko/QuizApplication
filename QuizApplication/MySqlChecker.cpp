@@ -2,9 +2,16 @@
 #include <mysql_driver.h>
 #include <mysql_connection.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/stringbuffer.h"
 
 using namespace sql;
 using namespace std;
+using namespace rapidjson;
 
 MySqlChecker::MySqlChecker(const string& server, const string& username, const string& password) : server(server), username(username), pass(password) {}
 
@@ -18,6 +25,54 @@ bool MySqlChecker::checkConnection() const {
 		con.reset(driver->connect(server, username, pass));
 
 		cout << "MySQL is installed!" << endl;
+
+		// set the credentials in the config.json file.
+
+
+		const char* tempUName = username.c_str();
+		const char* tempPass = pass.c_str();
+		const char* tempSer = server.c_str();
+
+
+		ifstream inputFile("config.json");
+		if (!inputFile.is_open()) {
+			cerr << "Failed to open config.json file. Make sure its present in the directory." << endl;
+			exit(0);
+		}
+		stringstream buffer;
+		buffer << inputFile.rdbuf();
+		string jsonText = buffer.str();
+		inputFile.close();
+
+		//Parse the Doc
+		Document doc;
+		doc.Parse(jsonText.c_str());
+
+		//update values
+		if (doc.HasMember("username")) {
+			doc["username"].SetString(tempUName, strlen(tempUName), doc.GetAllocator());
+		}
+		if (doc.HasMember("password")) {
+			doc["password"].SetString(tempPass, strlen(tempPass), doc.GetAllocator());
+		}
+		if (doc.HasMember("server")) {
+			doc["server"].SetString(tempSer, strlen(tempSer), doc.GetAllocator());
+		}
+
+		//write to json file
+		FILE* fp;
+		if (fopen_s(&fp, "config.json", "w") != 0 || !fp) {
+			cerr << "Failed to open config.json for writing" << endl;
+			exit(0);
+		}
+
+		char writeBuffer[65536];  // 64 KB buffer
+		FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
+		PrettyWriter<FileWriteStream> writer(os);
+		doc.Accept(writer);
+
+		fclose(fp);
+
 		return true;
 	}
 	catch (const sql::SQLException& e)

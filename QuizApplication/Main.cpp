@@ -8,6 +8,8 @@
 #include "rapidjson/document.h"
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/filewritestream.h"
+//dll file
+#include "PrestartPrints.h"
 
 
 using namespace std;
@@ -158,8 +160,9 @@ bool Main::checkConfigFile() {
 
 
 int main() {
-	cout << "WELCOME To my Quiz Application." << "\t" << "Without any further ado, lets start!" << endl << endl;
-	cout << "------------------------------------------------------------------------------" << endl;
+	//cout << "WELCOME To my Quiz Application." << "\t" << "Without any further ado, lets start!" << endl << endl;
+	printWelcomeMessage();
+	cout << endl << "------------------------------------------------------------------------------" << endl;
 	Main application = Main();
 	application.start();
 

@@ -1,4 +1,7 @@
 {
-  "mySqlInstalled": true,
-  "schemaPresent": true
+    "mySqlInstalled": true,
+    "schemaPresent": true,
+    "username": "",
+    "password": "",
+    "server": ""
 }

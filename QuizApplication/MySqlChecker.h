@@ -13,9 +13,6 @@ class MySqlChecker
 public:
 	MySqlChecker(const string& server, const string& username, const string& password);
 	bool checkConnection() const;
-
-
-private:
 	string server;
 	string username;
 	string pass;
