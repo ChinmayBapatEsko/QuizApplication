@@ -34,7 +34,7 @@ bool MySqlChecker::checkConnection() const {
 		const char* tempSer = server.c_str();
 
 
-		ifstream inputFile("config.json");
+		ifstream inputFile("creds.json");
 		if (!inputFile.is_open()) {
 			cerr << "Failed to open config.json file. Make sure its present in the directory." << endl;
 			exit(0);
@@ -50,18 +50,24 @@ bool MySqlChecker::checkConnection() const {
 
 		//update values
 		if (doc.HasMember("username")) {
+			cout << "Hasmember1" << endl;
+			//doc["username"] = username;
 			doc["username"].SetString(tempUName, strlen(tempUName), doc.GetAllocator());
 		}
 		if (doc.HasMember("password")) {
+			cout << "Hasmember2" << endl;
+			//doc["password"] = pass;
 			doc["password"].SetString(tempPass, strlen(tempPass), doc.GetAllocator());
 		}
 		if (doc.HasMember("server")) {
+			cout << "Hasmember3" << endl;
+			//doc["server"] = server;
 			doc["server"].SetString(tempSer, strlen(tempSer), doc.GetAllocator());
 		}
 
 		//write to json file
 		FILE* fp;
-		if (fopen_s(&fp, "config.json", "w") != 0 || !fp) {
+		if (fopen_s(&fp, "creds.json", "w") != 0 || !fp) {
 			cerr << "Failed to open config.json for writing" << endl;
 			exit(0);
 		}
@@ -70,7 +76,7 @@ bool MySqlChecker::checkConnection() const {
 		FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 		PrettyWriter<FileWriteStream> writer(os);
 		doc.Accept(writer);
-
+		fflush(fp);
 		fclose(fp);
 
 		return true;

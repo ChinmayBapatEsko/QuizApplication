@@ -129,21 +129,42 @@ void QuizUserManager::startUserOperation() {
 
 	string user_id = user.getUserId();
 
-	//fixing which category the user would like to choose
-	decideCategory();
+	//need to give user option to see his current accuracy.(wrt all quizzes) AND to see all his attempts
+
+	int choice;
+	cout << "Select your choice: " << endl;
+	cout << "1) Play Quiz" << endl << "2) View all previous quiz scores" << endl << "3) View User Accuracy" << endl;
+	cin >> choice;
+
+	if (choice == 1) {
+
+		//fixing which category the user would like to choose
+		decideCategory();
 	
-	//fixing which Quiz user would like to take
-	decideQuiz();
+		//fixing which Quiz user would like to take
+		decideQuiz();
 
-	//startQuiz
-	vector<pair<Question, Option>> userAnswered = startQuiz(user_id);
+		//startQuiz
+		vector<pair<Question, Option>> userAnswered = startQuiz(user_id);
 
-	//postQuizShow
-	postQuizShow(user_id, attempt_id, userAnswered);
+		//postQuizShow
+		postQuizShow(user_id, attempt_id, userAnswered);
 
-	//take another quiz
-	takeAnotherQuiz();
-
+		//take another quiz
+		takeAnotherQuiz();
+	}
+	else if (choice == 2) {
+		viewPreviousScores(user_id);
+		startUserOperation();
+	}
+	else if (choice == 3) {
+		cout << "Accuracy: " << viewUserAccuracy(user_id) << endl;
+		startUserOperation();
+	}
+	else {
+		cout << "Invalid Input" << endl;
+		exit(0);
+	}
 }
 
 void QuizUserManager::decideCategory() {

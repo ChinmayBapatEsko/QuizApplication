@@ -34,20 +34,18 @@ using namespace rapidjson;
 
 class DatabaseConnection {
 private:
-    string server = "tcp://127.0.0.1:3306";
-    string username = "root";
-    string password = "Chinpat@2002";
+    string server;
+    string username;
+    string password;
 
 public:
     Connection* conn;
     Driver* driver;
     DatabaseConnection() {
         if (server.empty() && username.empty() && password.empty()) {
-            cout << server << username << password;
             updateCredentials();
         }
         try {
-            cout << server << username << password;
             driver = get_driver_instance();
             conn = driver->connect(server, username, password);
         }
@@ -66,7 +64,7 @@ public:
     }
 
     void updateCredentials() {
-        ifstream configFile("config.json");
+        ifstream configFile("creds.json");
         if (!configFile.is_open()) {
             cerr << "Failed to open config.json" << endl;
             exit(1);

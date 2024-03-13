@@ -252,18 +252,20 @@ double DatabaseConnection::callViewUserAccuracy(const string& user_id) {
 void DatabaseConnection::callViewPreviousScores(const string& user_id) {
     try {
         conn->setSchema("quizapplication");
-        PreparedStatement* stmt = conn->prepareStatement("CALL GetAllUserAttemptsWScores(?)");
+        PreparedStatement* stmt = conn->prepareStatement("CALL GetAllUserAttemptsWScoresAndTitles(?)");
         stmt->setString(1, user_id);
         ResultSet* res = stmt->executeQuery();
 
-        cout << "Printing the history of the User with Quiz and its Scores: " << endl;
+        cout << "Printing the history of the User with Quiz and its Scores: " << endl << endl;
+        cout << "----------------------------------------------------------------------------------------------------" << endl;
 
         while (res->next()) {
-            string Score = res->getString("Score");
+            double Score = res->getDouble("Score");
             string quiz_title = res->getString("quiz_title");
 
-            cout << "Quiz Title: " << quiz_title << "and Score is: " << Score << endl;
+            cout << "Quiz Title: " << quiz_title << " and Score is: " << Score << endl;
         }
+        cout << "----------------------------------------------------------------------------------------------------" << endl;
         delete res;
         delete stmt;
 

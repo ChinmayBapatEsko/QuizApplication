@@ -101,5 +101,8 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="creds.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

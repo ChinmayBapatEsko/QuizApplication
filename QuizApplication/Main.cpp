@@ -161,6 +161,7 @@ bool Main::checkConfigFile() {
 
 int main() {
 	//cout << "WELCOME To my Quiz Application." << "\t" << "Without any further ado, lets start!" << endl << endl;
+	//calling the dll function
 	printWelcomeMessage();
 	cout << endl << "------------------------------------------------------------------------------" << endl;
 	Main application = Main();
