@@ -135,7 +135,6 @@
     <ClCompile Include="AuthenticationManager.cpp" />
     <ClCompile Include="Category.cpp" />
     <ClCompile Include="DatabaseConnection.cpp" />
-    <ClCompile Include="DatabaseSingleton.h" />
     <ClCompile Include="InstanceManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MySqlChecker.cpp" />
@@ -162,6 +161,7 @@
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="config.json" />
     <None Include="creds.json" />
     <None Include="packages.config" />

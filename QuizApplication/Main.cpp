@@ -1,13 +1,13 @@
 #include "Main.h"
-#include <string>
-#include <iostream>
 #include "MySqlChecker.h"
+#include "rapidjson/document.h"
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/prettywriter.h"
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
 #include <sstream>
-#include "rapidjson/document.h"
-#include "rapidjson/prettywriter.h"
-#include "rapidjson/filewritestream.h"
+#include <string>
 //dll file
 #include "PrestartPrints.h"
 
@@ -24,9 +24,6 @@ void Main::start() {
 	}
 
 	pair<bool, string> userCreds = authManager.init();
-	/*cout << "Main" << endl;
-	cout << userCreds.first;
-	cout << userCreds.second;*/
 
 	instManager = InstanceManager(userCreds);
 }
@@ -57,14 +54,29 @@ void Main::checkMySQLInstallation() {
 
 void Main::setLocalDatabase() {
 	string dbName = "quizapplication";
-	string sqlFilePath = "./quizDB.sql";
+	string sqlFilePath = "./quizapplication.sql";
+	string resultFile = "/.schema_check_result.txt";
 	string importCommand = "mysql -h " + userServer+ " -u " + userUsername + " -p " + userPassword + " " + dbName + " < " + sqlFilePath;
-	string checkSchemaCommand = "mysql -u "+ userUsername + " -p" + userPassword + " -e \"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" + dbName + "'\"";
+	string checkSchemaCommand = "mysql -u "+ userUsername + " -p" + userPassword + " -e \"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" + dbName + "'\" > " + resultFile;
 	//execute the command
 
-	int checkPresence = system(checkSchemaCommand.c_str());
+	system(checkSchemaCommand.c_str());
 
-	if (checkPresence != 0) {
+	ifstream inFile(resultFile);
+	string line;
+	bool schemaExists = false;
+	while (getline(inFile, line)) {
+		if (!line.empty()) {
+			schemaExists = true;
+			break;
+		}
+	}
+	inFile.close();
+	// Optionally delete the temporary file here
+	remove(resultFile.c_str());
+
+
+	if (!schemaExists) {
 		cout << "Database does not exist...Attempting to import...." << endl;
 		int importCheck = system(importCommand.c_str());
 		if (importCheck == 0)
