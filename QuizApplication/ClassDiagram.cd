@@ -1,2 +1,95 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Admin" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Admin.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AuthenticationManager" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAEAAAABAAoAAAAQAgAAAAA=</HashCode>
+      <FileName>AuthenticationManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Category" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAAAAAAAAACAA=</HashCode>
+      <FileName>Category.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DatabaseConnection" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EARAgAAAAQAAAogQAQOADAGDCAQQAClAISAAAwsAAAI=</HashCode>
+      <FileName>DatabaseConnection.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstanceManager" Collapsed="true">
+    <Position X="6" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InstanceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Main" Collapsed="true">
+    <Position X="7.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAABAAAAIAAAAAAACAAAABAAAAAA=</HashCode>
+      <FileName>Main.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MySqlChecker" Collapsed="true">
+    <Position X="9.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAEAQAAAAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>MySqlChecker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Option" Collapsed="true">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAACAAAAAAAAgAIAAAABAAAAAA=</HashCode>
+      <FileName>Option.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Question" Collapsed="true">
+    <Position X="7.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAEACAAAQAAIAA=</HashCode>
+      <FileName>Question.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quiz" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAgAAAAQAAAAAAAQAIAA=</HashCode>
+      <FileName>Quiz.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuizAdminManager" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAIAAAGAAAAAAAAAABCAQAAAsAAAgAgAAEAAQAAAA=</HashCode>
+      <FileName>QuizAdminManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuizUserManager" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAIBQAAEABAABAADCQAICABAAABEAAghAAABiQACQA=</HashCode>
+      <FileName>QuizUserManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="User" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAEEgBAAAAAgAAAAIIAEQAAAAAEAAgAAIAgACAIA=</HashCode>
+      <FileName>User.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

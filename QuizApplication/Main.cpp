@@ -35,20 +35,30 @@ void Main::checkMySQLInstallation() {
 	string tempPass;
 	string tempPort;
 
-	cout << "LETS CHECK IF YOU HAVE MYSQL PROPERLY INSTALLED INTO YOUR DEVICE" << endl;
-	cout << "Please enter the port number your MySQL server is hosted on localhost (Default is 3306. If you haven't changed, please input 3306.) : ";
-	cin >> tempPort;
-	cout << "\nPlease enter the username and password to your MySQL: ";
-	cin >> tempUsername >> tempPass;
+	try
+	{
+		cout << "LETS CHECK IF YOU HAVE MYSQL PROPERLY INSTALLED INTO YOUR DEVICE" << endl;
+		cout << "Please enter the port number your MySQL server is hosted on localhost (Default is 3306. If you haven't changed, please input 3306.) : ";
+		cin >> tempPort;
+		cout << "\nPlease enter the username and password to your MySQL: ";
+		cin >> tempUsername >> tempPass;
 
-	MySqlChecker checker(server + tempPort, tempUsername, tempPass);
-	if (!checker.checkConnection()) {
-		cerr << "Failed to establish connection" << endl;
+		MySqlChecker checker(server + tempPort, tempUsername, tempPass);
+		if (!checker.checkConnection()) {
+			cerr << "Failed to establish connection" << endl;
+			exit(0);
+		}
+		userServer = server + tempPort;
+		userUsername = tempUsername;
+		userPassword = tempPass;
+	}
+	catch (const std::exception& e)
+	{
+		cout << e.what() << endl;
+		cout << "CMON! Give proper Input!!!" << endl;
+		cout << "Restart Now, as your punishment  >_<   " << endl;
 		exit(0);
 	}
-	userServer = server + tempPort;
-	userUsername = tempUsername;
-	userPassword = tempPass;
 }
 
 
