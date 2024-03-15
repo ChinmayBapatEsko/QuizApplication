@@ -333,7 +333,7 @@ pair<bool, string> DatabaseConnection::callLoginFunction(const string& username,
         }
         else {
             //user not found
-            cout << "Invalid credentials or User not found! Retry!" << endl;
+            cout << "Invalid credentials or User not found!" << endl;
             return make_pair(false, "");
         }
 

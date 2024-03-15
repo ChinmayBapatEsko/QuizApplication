@@ -1,4 +1,4 @@
 {
-    "mySqlInstalled": true,
-    "schemaPresent": true
+    "mySqlInstalled": false,
+    "schemaPresent": false
 }

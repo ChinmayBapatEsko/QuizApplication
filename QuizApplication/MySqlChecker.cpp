@@ -50,17 +50,14 @@ bool MySqlChecker::checkConnection() const {
 
 		//update values
 		if (doc.HasMember("username")) {
-			cout << "Hasmember1" << endl;
 			//doc["username"] = username;
 			doc["username"].SetString(tempUName, strlen(tempUName), doc.GetAllocator());
 		}
 		if (doc.HasMember("password")) {
-			cout << "Hasmember2" << endl;
 			//doc["password"] = pass;
 			doc["password"].SetString(tempPass, strlen(tempPass), doc.GetAllocator());
 		}
 		if (doc.HasMember("server")) {
-			cout << "Hasmember3" << endl;
 			//doc["server"] = server;
 			doc["server"].SetString(tempSer, strlen(tempSer), doc.GetAllocator());
 		}

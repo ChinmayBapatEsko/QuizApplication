@@ -45,6 +45,7 @@ void AuthenticationManager::Register() {
 		string tempPass;
 		bool tempFlag;
 		int choice;
+		cout << "Lets get you Registered!" << endl;
 		cout << "Please enter Username and Password: " << endl;
 		cout << "Username: ";
 		cin >> tempUsername;
@@ -60,6 +61,8 @@ void AuthenticationManager::Register() {
 		}
 
 		DatabaseConnection().callRegisterFunction(tempUsername, tempPass, tempFlag);
+		cout << "Lets Retry logging in now: " << endl;
+		cout << "-------------------------------------------------------------" << endl;
 	}
 	catch (const std::exception& e)
 	{
@@ -69,7 +72,5 @@ void AuthenticationManager::Register() {
 		exit(0);
 	}
 
-	cout << "Lets Retry logging in now: " << endl;
-	cout << "-------------------------------------------------------------" << endl;
 
 }

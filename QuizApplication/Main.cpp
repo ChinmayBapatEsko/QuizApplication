@@ -48,9 +48,7 @@ void Main::checkMySQLInstallation() {
 			cerr << "Failed to establish connection" << endl;
 			exit(0);
 		}
-		userServer = server + tempPort;
-		userUsername = tempUsername;
-		userPassword = tempPass;
+		
 	}
 	catch (const std::exception& e)
 	{
@@ -63,6 +61,27 @@ void Main::checkMySQLInstallation() {
 
 
 void Main::setLocalDatabase() {
+
+	//get credentials from creds.json
+	ifstream configFile("creds.json");
+	if (!configFile.is_open()) {
+		cerr << "Failed to open config.json" << endl;
+		exit(1);
+	}
+
+	stringstream buffer;
+	buffer << configFile.rdbuf();
+	string jsonText = buffer.str();
+	configFile.close();
+
+	Document doc;
+	doc.Parse(jsonText.c_str());
+
+	// Set server, username, and password from JSON
+	string userServer = doc["server"].GetString();
+	string userUsername = doc["username"].GetString();
+	string userPassword = doc["password"].GetString();
+
 	string dbName = "quizapplication";
 	string sqlFilePath = "./quizapplication.sql";
 	string resultFile = "/.schema_check_result.txt";
@@ -95,7 +114,7 @@ void Main::setLocalDatabase() {
 		}
 		else {
 			cout << "Failed to import Database" << endl;
-			cout << "Try again. Check the file name (must be quizDB.sql) or check the file path (must be same directory as the .exe file)" << endl;
+			cout << "Try again. Check the file name (must be quizapplication.sql) or check the file path (must be same directory as the .exe file)" << endl;
 			exit(0);
 		}
 	}

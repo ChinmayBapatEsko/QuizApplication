@@ -42,12 +42,12 @@ public:
 	QuizUserManager(const User u);
 	QuizUserManager() {};
 
-	User user; //
-	Category cat;//
-	Quiz quiz;//
-	vector<pair<Question, vector<Option>>> QuestionList;//
-	vector<Category> currentCategories;//
-	vector<Quiz> quizzesInThisCategory;//
+	User user;
+	Category cat;
+	Quiz quiz;
+	vector<pair<Question, vector<Option>>> QuestionList;
+	vector<Category> currentCategories;
+	vector<Quiz> quizzesInThisCategory;
 
 	void getAllCategories();//
 	void getAllQuizes(const string &category_id);//

@@ -22,9 +22,7 @@ using namespace std;
 
 static AuthenticationManager authManager;
 static InstanceManager instManager;
-static string userServer;
-static string userUsername;
-static string userPassword;
+
 class Main
 {
 public:

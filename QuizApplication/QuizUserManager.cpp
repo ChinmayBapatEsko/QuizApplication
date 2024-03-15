@@ -36,6 +36,7 @@ vector<Option> QuizUserManager::getOptionByQuestion(const string& question_id) {
 }
 
 void QuizUserManager::setMap(const string& quiz_id) {
+	QuestionList.clear();
 	vector<Question> temp;
 	 temp = DatabaseConnection().callSetMap(quiz_id);
 	 //QuestionList = DatabaseConnection().callSetOptionsInMap(temp);
@@ -69,46 +70,73 @@ void QuizUserManager::insertUserAnswer(const string& attempt_id, vector<pair<Que
 void QuizUserManager::takeAnotherQuiz() {
 	int choice1, choice2;
 	try {
-		cout << "Do you want to play another quiz?" << endl;
-		cin >> choice1;
-		if (choice1 == 0) {
-			cout << "THANKYOU!!!" << endl;
-			exit(0);
-		}
-		else {
-			cout << "Do you want to take quiz of the same category?" << endl << "Press 1 for Yes and 0 for No: " << endl;
+
+		int choice;
+		cout << "Select your choice: " << endl;
+		cout << "1) Play Quiz" << endl << "2) View all previous quiz scores" << endl << "3) View User Accuracy" << endl << "4) Exit" << endl;
+		cin >> choice;
+
+		if (choice == 1) {
+			cout << "Do you want to play another quiz?" << endl;
 			cin >> choice1;
-			if (choice1 == 1) {
-				cout << "Do you want to retake the same quiz?" << endl << "Press 1 for Yes and 0 for No: " << endl;
-				cin >> choice2;
-				if (choice2 == 1) {
-					//start quiz
-					startQuiz(user.getUserId());
+			if (choice1 == 0) {
+				cout << "THANKYOU!!!" << endl;
+				exit(0);
+			}
+			else {
+				cout << "Do you want to take quiz of the same category?" << endl << "Press 1 for Yes and 0 for No: " << endl;
+				cin >> choice1;
+				if (choice1 == 1) {
+					cout << "Do you want to retake the same quiz?" << endl << "Press 1 for Yes and 0 for No: " << endl;
+					cin >> choice2;
+					if (choice2 == 1) {
+						//start quiz
+						startQuiz(user.getUserId());
+					}
+					else if (choice2 == 0) {
+						//decide quiz in same category
+						decideQuiz();
+						//start quiz
+						startQuiz(user.getUserId());
+					}
+					else {
+						throw new exception;
+					}
 				}
-				else if (choice2 == 0) {
-					//decide quiz in same category
-					decideQuiz();
-					//start quiz
-					startQuiz(user.getUserId());
+
+				else if (choice1 == 0) {
+					//need to reselect all the categories and redo everything == startUserOperation functionality
+					startUserOperation();
 				}
+
 				else {
 					throw new exception;
 				}
 			}
 
-			else if (choice1 == 0) {
-				//need to reselect all the categories and redo everything == startUserOperation functionality
-				startUserOperation();
-			}
-
-			else {
-				throw new exception;
-			}
 		}
+		else if (choice == 2) {
+			viewPreviousScores(user.getUserId());
+			startUserOperation();
+		}
+		else if (choice == 3) {
+			cout << "Accuracy: " << viewUserAccuracy(user.getUserId()) << endl;
+			startUserOperation();
+		}
+		else if (choice == 4) {
+			cout << "Thankyou!!!" << endl;
+			exit(0);
+		}
+		else {
+			cout << "Invalid Input" << endl;
+			exit(0);
+		}
+
 	}
-	catch(invalid_argument& e) {
-		cout << "Invalid input, please retry!"<<endl;
+	catch(std::exception& e) {
 		cout << e.what() << endl;
+		cout << "CMON! Give proper Input!!!" << endl;
+		cout << "Restart Now, as your punishment  >_<   " << endl;
 		exit(0);
 	}
 }
@@ -135,7 +163,7 @@ void QuizUserManager::startUserOperation() {
 	{
 		int choice;
 		cout << "Select your choice: " << endl;
-		cout << "1) Play Quiz" << endl << "2) View all previous quiz scores" << endl << "3) View User Accuracy" << endl;
+		cout << "1) Play Quiz" << endl << "2) View all previous quiz scores" << endl << "3) View User Accuracy" << endl << "4) Exit" << endl;
 		cin >> choice;
 
 		if (choice == 1) {
@@ -162,6 +190,10 @@ void QuizUserManager::startUserOperation() {
 		else if (choice == 3) {
 			cout << "Accuracy: " << viewUserAccuracy(user_id) << endl;
 			startUserOperation();
+		}
+		else if (choice == 4) {
+			cout << "Thankyou!!!" << endl;
+			exit(0);
 		}
 		else {
 			cout << "Invalid Input" << endl;
@@ -212,20 +244,24 @@ void QuizUserManager::decideCategory() {
 }
 
 void QuizUserManager::decideQuiz() {
+	
+	int choice;
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	cout << "Showing all the quizzes in the chosen category. Choose which quiz you want to attempt:  " << endl << endl;
+	getAllQuizes(cat.category_id);
+	int count = 0;
+	for (auto& quiz : quizzesInThisCategory) {
+		count++;
+		cout << count << ") " << quiz << endl;
+	}
+	cout << "-----------------------------------------------------------------------------------------------" << endl;
+	cout << "Make a choice!" << endl;
 	try
 	{
-		int choice;
-		std::this_thread::sleep_for(std::chrono::seconds(2));
-		cout << "Showing all the quizzes in the chosen category. Choose which quiz you want to attempt:  " << endl << endl;
-		getAllQuizes(cat.category_id);
-		int count = 0;
-		for (auto& quiz : quizzesInThisCategory) {
-			count++;
-			cout << count << ") " << quiz << endl;
-		}
-		cout << "-----------------------------------------------------------------------------------------------" << endl;
-		cout << "Make a choice!" << endl;
 		cin >> choice;
+		if (choice > quizzesInThisCategory.size()) {
+			throw new exception;
+		}
 		cout << "Ok, choosing quiz with title: " << count << ") " << quizzesInThisCategory[choice - 1].quiz_title << endl << endl;
 		quiz = quizzesInThisCategory[choice - 1];
 		cout << "------------------------------------------------------------------------------------------------" << endl;
